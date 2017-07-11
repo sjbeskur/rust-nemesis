@@ -1,0 +1,8 @@
+[package]
+name = "nemesis"
+version = "0.1.0"
+authors = ["sjbeskur <sam.beskur@gmail.com>"]
+
+[dependencies]
+snmp = "~0.2"
+rayon = "~0.8"

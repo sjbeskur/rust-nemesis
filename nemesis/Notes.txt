@@ -1,0 +1,9 @@
+
+sudo apt install snmp-mibs-downloader
+download-mibs
+
+#examples
+snmpget -v2c  -cggc_ro 10.10.1.254 iso.3.6.1.2.1.1.2.0
+
+snmpget -v2c  -cggc_ro 10.10.1.254 system.sysName.0
+snmpget -v2c  -cggc_ro 10.10.1.254 sysName.0
