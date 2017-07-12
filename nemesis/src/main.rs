@@ -23,13 +23,13 @@ fn main() {
 
     // need to parallelize this?
     for n in  1..10{     
-        let rslt = snmp_get(agent_addr.clone()); // I don't get why i have to do this to make it work
+        let rslt = snmp_get(&agent_addr); // I don't get why i have to do this to make it work
         println!("{} - {}",n,rslt);
     }
     
 }
 
-fn snmp_get(addr: String) -> String {
+fn snmp_get(addr: &String) -> String {
 
     let sys_descr_oid = &[1,3,6,1,2,1,1,1,];
     let community  = b"public";  // byte syntax 
