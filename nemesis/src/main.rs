@@ -3,28 +3,37 @@ use std::time::Duration;
 //use snmp::SyncSession;s
 //use snmp::Value;
 use snmp::{SyncSession, Value};
-use rayon::prelude::*;
+//use rayon::prelude::*;
+use ipaddress::IPAddress;
+use std::sync::{Arc, Mutex};
+use std::vec::*;
+
 extern crate snmp;
 extern crate rayon;
+extern crate ipaddress;
 
 fn main() {
     println!("Hello, NemesisS!");
 
-    println!("Enter an IPv4 address to poll: ");
+    println!("Enter an IPv4 subnet to poll (e.g. 192.168.0.0/24): ");
     let mut ip_addr = String::new();
     io::stdin().read_line(&mut ip_addr).expect("Failed to read line");
-    let agent_addr = ip_addr + ":161";
+        
+    let ip = IPAddress::parse(ip_addr).unwrap();
+    let arr = Arc::new(Mutex::new(Vec::new()));
+    ip.each_host(|i| arr.lock().unwrap().push(i.to_s()));
+    
+    let list = arr.lock().unwrap();
 
-    let ips = vec!["10.10.1.254","10.10.1.253","10.10.1.252"];
-    let test = ips.iter().map(|x| x).collect::<Vec<_>>();
-    for n in test{
-        println!("{}",n);
-    }
 
-    // need to parallelize this?
-    for n in  1..10{     
-        let rslt = snmp_get(&agent_addr); // I don't get why i have to do this to make it work
-        println!("{} - {}",n,rslt);
+    // TODO:// need to parallelize this?
+    // TODO:// need error checking
+    for i in 0..list.len(){
+        let  s = list[i].clone();
+        let agent_addr = s + ":161";
+        println!(" - {} -",agent_addr);
+        let rslt = snmp_get(&agent_addr); 
+        println!("{} ",rslt);
     }
     
 }
